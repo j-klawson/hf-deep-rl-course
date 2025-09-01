@@ -10,4 +10,6 @@ gymnasium
 box2d-py
 huggingface_sb3
 gymnasium[box2d]
-tqdm
+moviepy
+imageio
+imageio-ffmpeg

@@ -47,18 +47,17 @@ def check_pytorch_cuda():
         return False
 
 # Check prerequs for GPU processing
-driver_ok = check_nvidia_driver()
-pytorch_ok = check_pytorch_cuda()
-# if not (driver_ok and pytorch_ok):
-    # sys.exit("Error: NVIDIA driver or PyTorch CUDA support is missing. Exiting.")
-
+if not (check_nvidia_driver()):
+   sys.exit("Error: NVIDIA driver is missing. Exiting.")
+if not (check_pytorch_cuda()):
+   sys.exit("PyTorch CUDA support is missing. Exiting.")
+   
 # Setup virtual display
 virtual_display = Display(visible=0, size=(1400, 900))
 virtual_display.start()
 
 # First, we create our environment called LunarLander-v2
-# env = make_vec_env("LunarLander-v2", n_envs=16) 
-env = gym.make('LunarLander-v2')
+env = make_vec_env("LunarLander-v2", n_envs=16) 
 env.reset()
 
 # We added some parameters to accelerate the training
