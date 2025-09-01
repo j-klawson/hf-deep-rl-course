@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import sys
 # Virtual display
 from pyvirtualdisplay import Display
 import gymnasium
@@ -16,12 +17,14 @@ from stable_baselines3.common.callbacks import BaseCallback
 import torch
 
 print("cuda available:", torch.cuda.is_available())
+
 if torch.cuda.is_available():
     print("device count:", torch.cuda.device_count())
     print("name[0]:", torch.cuda.get_device_name(0))
 else:
     import platform
     print("platform:", platform.platform())
+    sys.exit("Error: CUDA is not available. Exiting.")
 
 # Setup virtual display
 virtual_display = Display(visible=0, size=(1400, 900))
