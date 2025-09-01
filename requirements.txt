@@ -1,3 +1,8 @@
+--index-url https://download.pytorch.org/whl/cu121
+torch
+torchvision
+torchaudio
+
 pyvirtualdisplay
 stable-baselines3==2.0.0a5
 swig

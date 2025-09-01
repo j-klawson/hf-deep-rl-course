@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
 import sys
+import subprocess
+import platform
+import torch
 # Virtual display
 from pyvirtualdisplay import Display
 import gymnasium
@@ -14,17 +17,40 @@ from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.monitor import Monitor
 import gymnasium as gym
 from stable_baselines3.common.callbacks import BaseCallback
-import torch
 
-print("cuda available:", torch.cuda.is_available())
+def check_nvidia_driver():
+    try:
+        result = subprocess.run(
+            ["nvidia-smi"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+        if result.returncode != 0:
+            print("NVIDIA driver check failed:\n", result.stderr)
+            return False
+        print(result.stdout.splitlines()[0])  # prints NVIDIA-SMI header line
+        return True
+    except FileNotFoundError:
+        print("Error: nvidia-smi not found. NVIDIA driver may not be installed.")
+        return False
 
-if torch.cuda.is_available():
-    print("device count:", torch.cuda.device_count())
-    print("name[0]:", torch.cuda.get_device_name(0))
-else:
-    import platform
-    print("platform:", platform.platform())
-    sys.exit("Error: CUDA is not available. Exiting.")
+def check_pytorch_cuda():
+    print("CUDA available in PyTorch:", torch.cuda.is_available())
+    if torch.cuda.is_available():
+        print("Device count:", torch.cuda.device_count())
+        print("GPU Name [0]:", torch.cuda.get_device_name(0))
+        print("PyTorch CUDA build:", torch.version.cuda)
+        return True
+    else:
+        print("Platform:", platform.platform())
+        return False
+
+# Check prerequs for GPU processing
+driver_ok = check_nvidia_driver()
+pytorch_ok = check_pytorch_cuda()
+# if not (driver_ok and pytorch_ok):
+    # sys.exit("Error: NVIDIA driver or PyTorch CUDA support is missing. Exiting.")
 
 # Setup virtual display
 virtual_display = Display(visible=0, size=(1400, 900))
@@ -54,3 +80,7 @@ model.learn(total_timesteps=1000000)
 # Save the model
 model_name = "ppo-LunarLander-v2"
 model.save(model_name)
+
+eval_env = Monitor(gym.make("LunarLander-v2"))
+mean_reward, std_reward = evaluate_policy(model, eval_env, n_eval_episodes=10, deterministic=True)
+print(f"mean_reward={mean_reward:.2f} +/- {std_reward}")
