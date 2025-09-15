@@ -65,3 +65,12 @@ build/
 *.old
 *.save
 
+# Model files and training artifacts
+*.zip
+*.pkl
+*.h5
+*.pt
+*.pth
+*-LunarLander-v2/
+*-Taxi-v3/
+
