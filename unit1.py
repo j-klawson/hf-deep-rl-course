@@ -6,16 +6,13 @@ import platform
 import torch
 # Virtual display
 from pyvirtualdisplay import Display
-import gymnasium
+import gymnasium as gym
 from huggingface_sb3 import load_from_hub, package_to_hub
-from huggingface_hub import (
-    notebook_login,
-)  # To log to our Hugging Face account to be able to upload models to the Hub.
+from huggingface_hub import notebook_login
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.monitor import Monitor
-import gymnasium as gym
 from stable_baselines3.common.callbacks import BaseCallback
 
 def check_nvidia_driver():
@@ -74,7 +71,7 @@ model = PPO(
     verbose=1
 )
 
-# Train it for 1,000,000 timesteps
+# Train it for 50,000,000 timesteps
 model.learn(total_timesteps=50000000)
 # Save the model
 model_name = "ppo-LunarLander-v2"
