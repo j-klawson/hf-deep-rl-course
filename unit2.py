@@ -230,30 +230,70 @@ def push_to_hub(repo_id, model, env, video_fps=1, local_repo_path="hub"):
     metadata = {**metadata, **eval}
 
     model_card = f"""
-# **Q-Learning** Agent playing1 **{env_id}**
-This is a trained model of a **Q-Learning** agent playing **{env_id}** .
+# **Q-Learning** Agent playing **{env_name}**
+
+This is a trained model of a **Q-Learning** agent playing **{env_name}**.
+
+## Results
+
+- **Mean reward**: {mean_reward:.2f} +/- {std_reward:.2f}
+- **Result**: {mean_reward - std_reward:.2f} (mean - std)
+- **Evaluation episodes**: {model["n_eval_episodes"]}
+
+## Environment Details
+
+- **Environment**: {model["env_id"]}
+- **Map**: {env.spec.kwargs.get("map_name", "default")}
+- **Slippery**: {env.spec.kwargs.get("is_slippery", True)}
+- **States**: {env.observation_space.n} possible positions
+- **Actions**: {env.action_space.n} possible actions
+
+## Training Hyperparameters
+
+- **Episodes**: {model["n_training_episodes"]:,}
+- **Learning rate**: {model["learning_rate"]}
+- **Gamma (discount)**: {model["gamma"]}
+- **Epsilon decay**: {model["decay_rate"]}
+- **Max epsilon**: {model["max_epsilon"]}
+- **Min epsilon**: {model["min_epsilon"]}
 
 ## Usage
 
-model = load_from_hub(repo_id="{repo_id}", filename="q-learning.pkl")
+```python
+from huggingface_hub import hf_hub_download
+import pickle
+import gymnasium as gym
+import numpy as np
 
-# Don't forget to check if you need to add additional attributes (is_slippery=False etc)
+# Load the Q-table
+model_path = hf_hub_download(repo_id="{repo_id}", filename="q-learning.pkl")
+with open(model_path, 'rb') as f:
+    model = pickle.load(f)
+
+# Create environment (adjust parameters as needed)
 env = gym.make(model["env_id"])
+
+# Use the trained agent
+def greedy_policy(qtable, state):
+    return np.argmax(qtable[state][:])
+
+state, info = env.reset()
+while True:
+    action = greedy_policy(model["qtable"], state)
+    state, reward, terminated, truncated, info = env.step(action)
+    if terminated or truncated:
+        break
+```
+
 """
 
     evaluate_agent(env, model["max_steps"], model["n_eval_episodes"], model["qtable"], model["eval_seed"])
 
     readme_path = repo_local_path / "README.md"
-    readme = ""
-    print(readme_path.exists())
-    if readme_path.exists():
-        with readme_path.open("r", encoding="utf8") as f:
-            readme = f.read()
-    else:
-        readme = model_card
 
+    # Always use the new model card to update the README
     with readme_path.open("w", encoding="utf-8") as f:
-        f.write(readme)
+        f.write(model_card)
 
     # Save our metrics to Readme metadata
     metadata_save(readme_path, metadata)
