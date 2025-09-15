@@ -82,5 +82,3 @@ python unit2.py --taxi --upload --username your-username
 
 - **Unit 1 (PPO)**: Requires CUDA-capable GPU (uses gpu_check.py for validation)
 - **Unit 2 (Q-Learning)**: CPU only (NumPy-based, no GPU needed)
-
-```
