@@ -5,10 +5,13 @@ Exercises and implementations for the Hugging Face [Deep Reinforcement Learning 
 ## Project Structure
 
 ```
-├── unit1.py              # PPO Lunar Lander training
-├── unit1_push.py         # Push Unit 1 model to Hub
-├── unit2.py              # Unified Q-Learning script with CLI
-├── gpu_check.py          # GPU validation utilities
+├── src/
+│   ├── unit1.py          # PPO Lunar Lander training
+│   ├── unit1_push.py     # Push Unit 1 model to Hub
+│   ├── unit2.py          # Unified Q-Learning script with CLI
+│   └── utils/
+│       └── gpu_check.py  # GPU validation utilities
+├── models/               # Trained model files
 ├── requirements.txt      # All dependencies
 ├── CLAUDE.md            # Detailed project context
 └── README.md            # This file
@@ -46,7 +49,7 @@ pip install -r requirements.txt
 pip install pyglet --index-url https://pypi.org/simple/
 
 # Check GPU support (for Unit 1)
-python gpu_check.py
+python src/utils/gpu_check.py
 ```
 
 ## Usage
@@ -54,28 +57,28 @@ python gpu_check.py
 ### Unit 1: PPO Training
 ```bash
 # Train PPO agent (requires GPU)
-python unit1.py
+python src/unit1.py
 
 # Push trained model to Hub
-python unit1_push.py
+python src/unit1_push.py
 ```
 
 ### Unit 2: Q-Learning Training
 ```bash
 # Train FrozenLake agent
-python unit2.py --frozenlake
+python src/unit2.py --frozenlake
 
 # Train FrozenLake and upload to Hub
-python unit2.py --frozenlake --upload
+python src/unit2.py --frozenlake --upload
 
 # Train Taxi agent
-python unit2.py --taxi
+python src/unit2.py --taxi
 
 # Train Taxi and upload to Hub
-python unit2.py --taxi --upload
+python src/unit2.py --taxi --upload
 
 # Use different username
-python unit2.py --taxi --upload --username your-username
+python src/unit2.py --taxi --upload --username your-username
 ```
 
 ## GPU Requirements

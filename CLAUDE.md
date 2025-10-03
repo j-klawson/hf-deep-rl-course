@@ -5,17 +5,21 @@ This is a repository for exercises from the Hugging Face Deep Reinforcement Lear
 
 ## Current File Structure
 ```
-├── unit1.py              # PPO Lunar Lander training (50M timesteps, CUDA)
-├── unit1_push.py         # Push Unit 1 model to Hugging Face Hub
-├── unit2.py              # Unified Q-Learning script with CLI switches
-├── gpu_check.py          # GPU validation utilities (standalone + importable)
+├── src/
+│   ├── unit1.py          # PPO Lunar Lander training (50M timesteps, CUDA)
+│   ├── unit1_push.py     # Push Unit 1 model to Hugging Face Hub
+│   ├── unit2.py          # Unified Q-Learning script with CLI switches
+│   └── utils/
+│       └── gpu_check.py  # GPU validation utilities (standalone + importable)
+├── models/               # Trained model files (ppo-LunarLander-v2.zip)
 ├── requirements.txt      # All dependencies (with compatibility fixes)
 ├── CLAUDE.md            # This context file
 └── README.md            # User-facing documentation
 ```
 
 ## Git Status
-- Current branch: `unit2`
+- Current branch: `main`
+- Files reorganized into `src/` directory structure
 - All major training files completed and functional
 - Models pushed to Hugging Face Hub
 
@@ -40,13 +44,13 @@ This is a repository for exercises from the Hugging Face Deep Reinforcement Lear
 ## CLI Usage Patterns
 ```bash
 # Unit 1: PPO (GPU required)
-python unit1.py                                    # Train agent
-python unit1_push.py                              # Push to Hub
+python src/unit1.py                                    # Train agent
+python src/unit1_push.py                              # Push to Hub
 
 # Unit 2: Q-Learning (CPU only)
-python unit2.py --frozenlake [--upload]           # Train FrozenLake
-python unit2.py --taxi [--upload]                 # Train Taxi
-python unit2.py --taxi --upload --username NAME   # Custom username
+python src/unit2.py --frozenlake [--upload]           # Train FrozenLake
+python src/unit2.py --taxi [--upload]                 # Train Taxi
+python src/unit2.py --taxi --upload --username NAME   # Custom username
 ```
 
 ## Technical Architecture
