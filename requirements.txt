@@ -4,18 +4,14 @@ torchvision
 torchaudio
 
 pyvirtualdisplay
-stable-baselines3==2.0.0a5
 swig
-gymnasium
+gymnasium[box2d,atari,accept-rom-license]
 box2d-py
-huggingface_sb3
-gymnasium[box2d]
 moviepy
 imageio
 imageio-ffmpeg
 
 # Unit 2 requirements (https://raw.githubusercontent.com/huggingface/deep-rl-class/main/notebooks/unit2/requirements-unit2.txt)
-
 pygame
 numpy
 huggingface_hub
@@ -23,3 +19,7 @@ huggingface_hub
 pyyaml>=6.0
 # pyglet - install separately: pip install pyglet --index-url https://pypi.org/simple/
 tqdm
+
+# Unit 3 requirements
+rl-zoo3>=2.7.0
+opencv-python
